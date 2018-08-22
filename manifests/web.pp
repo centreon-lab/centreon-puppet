@@ -2,9 +2,9 @@
 # Centreon Web deploy
 #
 
-class centreon::web {
-
-  include centreon::common
+class centreon::web (
+  $php_timezone = 'Europe/Paris',
+) inherits ::centreon::common {
 
   $centreon_web_packages = [
     'centreon-base-config-centreon-engine',

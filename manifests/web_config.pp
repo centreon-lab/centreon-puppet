@@ -1,5 +1,10 @@
-
-class centreon::web_config {
+#
+# Centreon web initial configuration
+#
+class centreon::web_config (
+  $centreon_admin_password = 'changeme',
+  $mysql_centreon_password = 'changeme'
+  ){
 
   # Create install directory
   file { '/usr/share/centreon/install':
