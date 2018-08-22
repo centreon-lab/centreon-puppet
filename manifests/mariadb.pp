@@ -1,9 +1,8 @@
 #
-# Centreon Web deploy
+# Centreon Web MariaDB server
 #
 
-class centreon::mariadb {
-  include centreon::common
+class centreon::mariadb inherits ::centreon::common {
 
   $mariadb_packages = [
     'MariaDB-server'

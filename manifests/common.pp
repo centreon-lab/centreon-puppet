@@ -6,11 +6,11 @@ class centreon::common {
 
   if $::operatingsystem != 'CentOS' {
     # Not compatible with non CentOS
-    ...
+    fail('Not compatible with non CentOS operating system')
 
   } elsif ! $::operatingsystemmajrelease in [6,7] {
     # Not compatible with this version
-
+    fail('You must use a Centos 6 or 7 version')
   }
 
   # Add centreon repository
@@ -28,7 +28,9 @@ class centreon::common {
   exec { 'Centreon import GPG repository key':
     path      => '/bin:/usr/bin:/sbin:/usr/sbin',
     command   => 'rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CES',
-    unless    => 'rpm -q gpg-pubkey-`echo $(gpg --throw-keyids < /etc/pki/rpm-gpg/RPM-GPG-KEY-CES) | cut --characters=11-18 | tr [A-Z] [a-z]`',
+    unless    => 'rpm -q gpg-pubkey-`\
+      echo $(gpg --throw-keyids < /etc/pki/rpm-gpg/RPM-GPG-KEY-CES) | \
+      cut --characters=11-18 | tr [A-Z] [a-z]`',
     require   => [
       File['/etc/pki/rpm-gpg/RPM-GPG-KEY-CES'],
       File['/etc/yum.repos.d/centreon-stable.repo']
