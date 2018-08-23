@@ -18,15 +18,16 @@ class centreon::web (
     require => Exec['Centreon import GPG repository key']
   }
 
-  service { 'httpd':
-    ensure  => running,
-    enable  => true,
-    require => Package[$centreon_web_packages]
-  }
-
   file { '/etc/php.d/php-timezone.ini':
     ensure  => present,
     content => "date.timezone = ${php_timezone}",
+    require => Package[$centreon_web_packages],
+    notify  => Service['httpd']
+  }
+
+  service { 'httpd':
+    ensure  => running,
+    enable  => true,
     require => Package[$centreon_web_packages]
   }
 
