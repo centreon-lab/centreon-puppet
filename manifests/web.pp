@@ -30,12 +30,22 @@ class centreon::web (
     require => Package[$centreon_web_packages]
   }
 
+  file { '/var/spool/centreon/.ssh':
+    ensure => 'directory',
+    owner  => 'centreon',
+    group  => 'centreon',
+    mode   => '0700'
+  }
+
   exec { 'Generate SSH keys':
     path    => '/bin:/usr/bin:/sbin:/usr/sbin',
     command => 'ssh-keygen -t rsa -f /var/spool/centreon/.ssh/id_rsa -q -N ""',
     user    => 'centreon',
     creates => '/var/spool/centreon/.ssh/id_rsa',
-    require => Package[$centreon_web_packages]
+    require => [
+      File['/var/spool/centreon/.ssh'],
+      Package[$centreon_web_packages]
+    ]
   }
 
   file { '/etc/centreon/centreon.conf.php':
