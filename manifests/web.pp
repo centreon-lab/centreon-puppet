@@ -30,11 +30,11 @@ class centreon::web (
     require => Package[$centreon_web_packages]
   }
 
-  file { '/var/spool/centreon/.ssh':
+  file { '/var/spool/centreon':
     ensure => 'directory',
     owner  => 'centreon',
     group  => 'centreon',
-    mode   => '0700'
+    mode   => '0775'
   }
 
   exec { 'Generate SSH keys':
@@ -43,7 +43,7 @@ class centreon::web (
     user    => 'centreon',
     creates => '/var/spool/centreon/.ssh/id_rsa',
     require => [
-      File['/var/spool/centreon/.ssh'],
+      File['/var/spool/centreon'],
       Package[$centreon_web_packages]
     ]
   }
