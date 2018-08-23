@@ -6,6 +6,8 @@ class centreon::web (
   $php_timezone = 'Europe/Paris',
 ) inherits ::centreon::common {
 
+  include stdlib
+
   $centreon_web_packages = [
     'centreon-base-config-centreon-engine',
     'centreon'
@@ -37,7 +39,7 @@ class centreon::web (
   }
 
   file { '/etc/centreon/centreon.conf.php':
-    content => template('centreon.conf.php.erb'),
+    content => template('centreon/centreon.conf.php.erb'),
     owner   => 'centreon',
     group   => 'centreon',
     mode    => '0644',
@@ -52,7 +54,7 @@ class centreon::web (
   }
 
   file { '/etc/centreon/conf.pm':
-    content => template('conf.pm.erb'),
+    content => template('centreon/conf.pm.erb'),
     owner   => 'centreon',
     group   => 'centreon',
     mode    => '0644',
