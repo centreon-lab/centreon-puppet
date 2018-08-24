@@ -13,6 +13,11 @@ class centreon::common {
     fail('You must use a Centos 6 or 7 version')
   }
 
+  # Disable selinux
+  class {'::selinux':
+    mode => 'disabled',
+  }
+
   # Add centreon repository
   file { '/etc/yum.repos.d/centreon-stable.repo':
     ensure => present,
