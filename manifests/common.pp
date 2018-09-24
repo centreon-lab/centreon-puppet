@@ -14,7 +14,7 @@ class centreon::common {
   }
 
   # Disable selinux
-  class {'::selinux':
+  class { '::selinux':
     mode => 'disabled',
   }
 

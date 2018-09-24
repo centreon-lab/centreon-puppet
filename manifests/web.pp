@@ -75,4 +75,12 @@ class centreon::web (
 
   include centreon::web_config
 
+  class { 'firewalld': }
+  firewalld_port { 'Open port 80 to Centreon Web':
+    ensure   => present,
+    zone     => 'public',
+    port     => 80,
+    protocol => 'tcp',
+  }
+
 }

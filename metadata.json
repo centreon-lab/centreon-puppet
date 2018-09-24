@@ -6,8 +6,9 @@
   "license": "Apache-2.0",
   "source": "",
   "dependencies": [
-    {"name": "puppetlabs/stdlib", "version_requirement": ">= 3.2.0" },
-    {"name": "puppet-selinux", "version_requirement": ">= 0.5.0" }
+    {"name": "puppetlabs/stdlib", "version_requirement": ">= 4.20.0" },
+    {"name": "puppet/selinux", "version_requirement": ">= 1.5.2" },
+    {"name": "crayfishx/firewalld", "version_requirement": ">= 3.4.0" }
   ],
   "operatingsystem_support": [
     {
