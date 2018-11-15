@@ -10,7 +10,7 @@ class centreon::mariadb inherits ::centreon::common {
 
   package { $mariadb_packages:
     ensure  => latest,
-    require => Exec['Centreon import GPG repository key']
+    require => Package['Centreon Repository']
   }
 
   service { 'mysql':

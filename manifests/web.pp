@@ -8,6 +8,10 @@ class centreon::web (
 
   include stdlib
 
+  package { 'centos-release-scl':
+    ensure  => latest
+  }
+
   $centreon_web_packages = [
     'centreon-base-config-centreon-engine',
     'centreon'
@@ -15,10 +19,13 @@ class centreon::web (
 
   package { $centreon_web_packages:
     ensure  => latest,
-    require => Exec['Centreon import GPG repository key']
+    require => [
+      Package['Centreon Repository'],
+      Package['centos-release-scl']
+    ]
   }
 
-  file { '/etc/php.d/php-timezone.ini':
+  file { '/etc/opt/rh/rh-php71/php.d/php-timezone.ini':
     ensure  => present,
     content => "date.timezone = ${php_timezone}",
     require => Package[$centreon_web_packages],

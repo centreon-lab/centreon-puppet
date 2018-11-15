@@ -174,6 +174,7 @@ class centreon::web_replaces (
   ]
 
   $files = [
+    '/usr/share/centreon/www/install/createTablesCentstorage.sql',
     '/usr/share/centreon/www/install/insertBaseConf.sql',
     '/usr/share/centreon/www/install/var/baseconf/centreon-broker.sql',
     '/usr/share/centreon/www/install/var/baseconf/centreon-engine.sql'
