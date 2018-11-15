@@ -4,7 +4,7 @@
   "author": "Centreon",
   "summary": "Centreon Monitoring",
   "license": "Apache-2.0",
-  "source": "",
+  "source": "https://github.com/centreon-lab/centreon-puppet",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
