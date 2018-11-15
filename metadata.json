@@ -6,9 +6,18 @@
   "license": "Apache-2.0",
   "source": "",
   "dependencies": [
-    {"name": "puppetlabs/stdlib", "version_requirement": ">= 4.20.0" },
-    {"name": "puppet/selinux", "version_requirement": ">= 1.5.2" },
-    {"name": "crayfishx/firewalld", "version_requirement": ">= 3.4.0" }
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.20.0"
+    },
+    {
+      "name": "puppet/selinux",
+      "version_requirement": ">= 1.5.2"
+    },
+    {
+      "name": "crayfishx/firewalld",
+      "version_requirement": ">= 3.4.0"
+    }
   ],
   "operatingsystem_support": [
     {
@@ -42,7 +51,7 @@
       "version_requirement": ">= 4.7.0 < 6.0.0"
     }
   ],
-  "pdk-version": "1.7.0",
+  "pdk-version": "1.7.1",
   "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git",
-  "template-ref": "1.7.0-0-g57412ed"
+  "template-ref": "1.7.1-0-g810b982"
 }
