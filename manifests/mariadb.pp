@@ -10,7 +10,7 @@ class centreon::mariadb inherits ::centreon::common {
 
   package { $mariadb_packages:
     ensure  => latest,
-    require => Package['Centreon Repository']
+    require => Class['remoterpm']
   }
 
   service { 'mysql':
@@ -32,5 +32,6 @@ class centreon::mariadb inherits ::centreon::common {
       command => 'systemctl daemon-reload'
     }
   }
+
 
 }

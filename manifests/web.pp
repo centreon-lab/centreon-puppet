@@ -20,7 +20,7 @@ class centreon::web (
   package { $centreon_web_packages:
     ensure  => latest,
     require => [
-      Package['Centreon Repository'],
+      Class['remoterpm'],
       Package['centos-release-scl']
     ]
   }

@@ -18,10 +18,16 @@ class centreon::common {
     mode => 'disabled',
   }
 
-  # Add centreon repository
-  package { 'Centreon Repository':
-    ensure  => present,
-    source  => 'http://yum.centreon.com/standard/18.10/el7/stable/noarch/RPMS/centreon-release-18.10-2.el7.centos.noarch.rpm',
+  class remoterpm ( $src ) {
+    package { 'package':
+      provider  => 'rpm',
+      ensure    => installed,
+      source    => "${remoterpm::src}"
+    }
+  }
+
+  class { 'remoterpm':
+    src => 'http://yum.centreon.com/standard/18.10/el7/stable/noarch/RPMS/centreon-release-18.10-2.el7.centos.noarch.rpm'',
   }
 
 }
