@@ -193,7 +193,7 @@ class centreon::web_replaces (
     }
   }
 
-  mysql::db { "Create table ${mysql_centreon_db}":
+  class { '::mysql::db':
     db       => $mysql_centreon_db,
     user     => $mysql_centreon_username,
     password => $mysql_centreon_password,
@@ -202,7 +202,7 @@ class centreon::web_replaces (
     sql      => '/usr/share/centreon/www/install/createTables.sql'
   }
 
-  mysql::db { "Create table ${mysql_centstorage_db}":
+  class { '::mysql::db':
     db       => $mysql_centstorage_db,
     user     => $mysql_centreon_username,
     password => $mysql_centreon_password,
