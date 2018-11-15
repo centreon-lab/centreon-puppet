@@ -14,7 +14,8 @@ class centreon::web_replaces (
 
   class { '::mysql::server':
     root_password           => $mysql_root_password,
-    remove_default_accounts => true
+    remove_default_accounts => true,
+    restart                 => true
   }
 
   $items = [
@@ -193,8 +194,7 @@ class centreon::web_replaces (
     }
   }
 
-  class { '::mysql::db':
-    db       => $mysql_centreon_db,
+  mysql::db { $mysql_centreon_db:
     user     => $mysql_centreon_username,
     password => $mysql_centreon_password,
     host     => 'localhost',
@@ -202,8 +202,7 @@ class centreon::web_replaces (
     sql      => '/usr/share/centreon/www/install/createTables.sql'
   }
 
-  class { '::mysql::db':
-    db       => $mysql_centstorage_db,
+  mysql::db { $mysql_centstorage_db:
     user     => $mysql_centreon_username,
     password => $mysql_centreon_password,
     host     => 'localhost',
