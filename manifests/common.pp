@@ -27,7 +27,7 @@ class centreon::common {
   }
 
   class { 'remoterpm':
-    src => 'http://yum.centreon.com/standard/18.10/el7/stable/noarch/RPMS/centreon-release-18.10-2.el7.centos.noarch.rpm'',
+    src => 'http://yum.centreon.com/standard/18.10/el7/stable/noarch/RPMS/centreon-release-18.10-2.el7.centos.noarch.rpm',
   }
 
 }
