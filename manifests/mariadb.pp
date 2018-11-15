@@ -5,12 +5,12 @@
 class centreon::mariadb inherits ::centreon::common {
 
   $mariadb_packages = [
-    'MariaDB-server'
+    'mariadb55-mariadb-server'
   ]
 
   package { $mariadb_packages:
     ensure  => latest,
-    require => Class['remoterpm']
+    require => Package['centreon-release-18.10-2.el7.centos.noarch.rpm']
   }
 
   service { 'mysql':
