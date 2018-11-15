@@ -162,22 +162,15 @@ class centreon::web_replaces (
       match => '@CENTREONBROKER_VARLIB@',
       line => '/var/lib/centreon-broker'
     },
+    { 
+      match => '@ADMIN_PASSWORD@',
+      line => $centreon_admin_password
+    },
+    {
+      match => '$dbpasswd',
+      line => $mysql_centreon_password
+    }
   ]
-
-  file { 'Set file insertBaseConf':
-    path    => '/usr/share/centreon/www/install/insertBaseConf.sql',
-    ensure  => present
-  }
-  -> file_line { 'Set Centreon admin password':
-    path    => '/usr/share/centreon/www/install/insertBaseConf.sql',
-    match   => '@ADMIN_PASSWORD@',
-    replace => $centreon_admin_password
-  }
-  -> file_line { 'Set MariaDB centreon password':
-    path    => '/usr/share/centreon/www/install/insertBaseConf.sql',
-    match   => '$dbpasswd',
-    replace => $mysql_centreon_password
-  }
 
   $files = [
     '/usr/share/centreon/www/install/insertBaseConf.sql',
