@@ -164,7 +164,8 @@ class centreon::web_replaces (
     },
   ]
 
-  file { '/usr/share/centreon/www/install/insertBaseConf.sql':
+  file { 'Set file insertBaseConf':
+    path    => '/usr/share/centreon/www/install/insertBaseConf.sql',
     ensure  => present
   }
   -> file_line { 'Set Centreon admin password':
