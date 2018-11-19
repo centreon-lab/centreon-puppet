@@ -27,10 +27,10 @@ class centreon::common {
   }
 
   package { 'centreon-release':
-    provider  => 'rpm',
-    ensure    => installed,
-    source    => '/tmp/centreon-release-18.10-2.el7.centos.noarch.rpm',
-    require   => File['/tmp/centreon-release-18.10-2.el7.centos.noarch.rpm']
+    ensure   => installed,
+    provider => 'rpm',
+    source   => '/tmp/centreon-release-18.10-2.el7.centos.noarch.rpm',
+    require  => File['/tmp/centreon-release-18.10-2.el7.centos.noarch.rpm']
   }
 
 }
