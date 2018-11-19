@@ -16,10 +16,10 @@ class centreon::mariadb inherits ::centreon::common {
   }
 
   exec { 'set-mysql-password':
-    unless => "mysqladmin -uroot -p$mysql_root_password status",
-    path => ["/bin", "/usr/bin"],
-    command => "mysqladmin -uroot password $mysql_root_password",
-    require => Service["mysqld"],
+    unless  => "mysqladmin -uroot -p${mysql_root_password} status",
+    path    => ['/bin', '/usr/bin'],
+    command => "mysqladmin -uroot password ${mysql_root_password}",
+    require => Service['mysqld'],
   }
 
   if $::operatingsystemmajrelease == 7 {
