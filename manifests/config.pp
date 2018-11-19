@@ -4,10 +4,6 @@
 
 class centreon::config inherits ::centreon::common {
 
-  package { 'epel-release':
-    ensure  => latest
-  }
-
   $wrapper_packages = [
     'python34-requests',
     'python34-PyYAML'

@@ -12,12 +12,6 @@ class centreon::web_replaces (
   $mysql_centstorage_db = 'centreon_storage'
 ) {
 
-  class { '::mysql::server':
-    root_password           => $mysql_root_password,
-    remove_default_accounts => true,
-    restart                 => true
-  }
-
   $items = [
     {
       match => '@CENTREON_DIR@',

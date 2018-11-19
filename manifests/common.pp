@@ -18,11 +18,15 @@ class centreon::common {
     mode => 'disabled',
   }
 
+  package { 'epel-release':
+    ensure  => latest
+  }
+
   file {'/tmp/centreon-release-18.10-2.el7.centos.noarch.rpm':
     source  => 'http://yum.centreon.com/standard/18.10/el7/stable/noarch/RPMS/centreon-release-18.10-2.el7.centos.noarch.rpm'
   }
 
-  package { 'centreon-release-18.10-2.el7.centos.noarch.rpm':
+  package { 'centreon-release':
     provider  => 'rpm',
     ensure    => installed,
     source    => '/tmp/centreon-release-18.10-2.el7.centos.noarch.rpm',
