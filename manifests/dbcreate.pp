@@ -1,5 +1,14 @@
 
-class centreon::dbcreate inherits ::centreon::mariadb {
+class centreon::dbcreate inherits ::centreon::mariadb (
+  $centreon_admin_password = 'changeme',
+  $mysql_root_password = 'changeme',
+  $mysql_centreon_password = 'changeme',
+  $mysql_centreon_hostname = 'localhost',
+  $mysql_port = '3306',
+  $mysql_centreon_username = 'centreon',
+  $mysql_centreon_db = 'centreon',
+  $mysql_centstorage_db = 'centreon_storage'
+) {
 
   define centreon::dbcreate( $user, $password, $sql ) {
     $ml_exec = @(EOT)
