@@ -4,20 +4,22 @@
 
 class centreon::mariadb inherits ::centreon::common {
 
-  class {'::mysql::server':
-    package_name     => 'MariaDB-server',
-    package_ensure   => '10.1.36-1.el7.centos',
-    service_name     => 'mysql',
-    root_password    => 'AVeryStrongPasswordUShouldEncrypt!',
-    override_options => {
-      mysqld => {
-        'log-error' => '/var/log/mysql/mariadb.log',
-        'pid-file'  => '/var/run/mysqld/mysqld.pid',
-      },
-      mysqld_safe => {
-        'log-error' => '/var/log/mysql/mariadb.log',
-      },
-    }
+  package { 'MariaDB-server':
+    ensure  => latest,
+    require => Package['centreon-release']
+  }
+
+  service { 'mysqld':
+    ensure  => running,
+    enable  => true,
+    require => Package['MariaDB-server']
+  }
+
+  exec { 'set-mysql-password':
+    unless => "mysqladmin -uroot -p$mysql_root_password status",
+    path => ["/bin", "/usr/bin"],
+    command => "mysqladmin -uroot password $mysql_root_password",
+    require => Service["mysqld"],
   }
 
   if $::operatingsystemmajrelease == 7 {
@@ -26,7 +28,7 @@ class centreon::mariadb inherits ::centreon::common {
       content => "[Service]
         LimitNOFILE=32000",
       notify  => Exec['reload systemctl'],
-      require => Class['::mysql::server']
+      require => Package['MariaDB-server']
     }
     exec { 'reload systemctl':
       path    => '/bin:/usr/bin:/sbin:/usr/sbin',

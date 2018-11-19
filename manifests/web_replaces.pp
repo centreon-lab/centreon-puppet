@@ -189,20 +189,30 @@ class centreon::web_replaces (
     }
   }
 
-  mysql::db { $mysql_centreon_db:
-    user     => $mysql_centreon_username,
-    password => $mysql_centreon_password,
-    host     => 'localhost',
-    grant    => ['ALL PRIVILEGES'],
-    sql      => '/usr/share/centreon/www/install/createTables.sql'
+  define mysqldb( $user, $password, $sql ) {
+    $ml_exec = @(EOT)
+      /usr/bin/mysql -uroot -p$mysql_password -e \
+      \"create database ${name}; grant all on ${name}.* to ${user}@localhost identified by '$password';\"
+      /usr/bin/mysql -u$user -p$password ${name} <$sql
+    | EOT
+    exec { "create-${name}-db":
+      unless => "/usr/bin/mysql -u${user} -p${password} ${name}",
+      command => $ml_exec,
+      require => Service["mysqld"],
+    }
   }
 
-  mysql::db { $mysql_centstorage_db:
-    user     => $mysql_centreon_username,
-    password => $mysql_centreon_password,
-    host     => 'localhost',
-    grant    => ['ALL PRIVILEGES'],
-    sql      => '/usr/share/centreon/www/install/createTablesCentstorage.sql'
+  mysqldb { $mysql_centreon_db:
+      user      => $mysql_centreon_username,
+      password  => $mysql_centreon_password,
+      sql       => '/usr/share/centreon/www/install/createTables.sql'
   }
+
+  mysqldb { $mysql_centstorage_db:
+      user      => $mysql_centreon_username,
+      password  => $mysql_centreon_password,
+      sql       => '/usr/share/centreon/www/install/createTablesCentstorage.sql'
+  }
+
 
 }
