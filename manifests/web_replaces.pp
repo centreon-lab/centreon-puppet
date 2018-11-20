@@ -72,10 +72,13 @@ class centreon::web_replaces (
     file { $file:
       ensure  => present,
     }
-    $file_ = $file
-    $timestamp = generate('/bin/date', '+%H%M%S%N')
-    create_resources(exec, "Replace ${timestamp} ${file_}",
-      { command => "${exec_sed} ${file_}", require => File[$file_] }
+    create_resources(exec,
+      { 
+        "Replaces in ${file}" => {
+          command => "${exec_sed} ${file}",
+          require => File[$file]
+        }
+      }
     )
   }
 
