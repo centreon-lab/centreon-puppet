@@ -9,164 +9,57 @@ class centreon::web_replaces (
   $mysql_centstorage_db = 'centreon_storage'
 ) {
 
-  $items = [
-    {
-      match => '@CENTREON_DIR@',
-      line => '/usr/share/centreon/'
-    },
-    {
-      match => '@CENTREON_ETC@',
-      line => '/etc/centreon/'
-    },
-    {
-      match => '@CENTREON_DIR_WWW@',
-      line => '/usr/share/centreon/www/'
-    },
-    {
-      match => '@CENTREON_DIR_RRD@',
-      line => '/var/lib/centreon'
-    },
-    {
-      match => '@CENTREON_LOG@',
-      line => '/var/log/centreon'
-    },
-    {
-      match => '@CENTREON_VARLIB@',
-      line => '/var/lib/centreon'
-    },
-    {
-      match => '@CENTREON_GROUP@',
-      line => 'centreon'
-    },
-    {
-      match => '@CENTREON_USER@',
-      line => 'centreon'
-    },
-    { match => '@RRDTOOL_DIR@', line => '/usr/bin/rrdtool' },
-    { match => '@APACHE_USER@', line => 'apache' },
-    { match => '@APACHE_GROUP@', line => 'apache' },
-    { match => '@MAILER@', line => '/bin/mail' },
-    {
-      match => '@MONITORINGENGINE_USER@',
-      line => 'centreon-engine'
-    },
-    {
-      match => '@MONITORINGENGINE_GROUP@',
-      line => 'centreon-engine'
-    },
-    {
-      match => '@MONITORINGENGINE_ETC@',
-      line => '/etc/centreon-engine'
-    },
-    {
-      match => '@MONITORING_INIT_SCRIPT@',
-      line => 'centengine'
-    },
-    {
-      match => '@MONITORING_BINARY@',
-      line => '/usr/sbin/centengine'
-    },
-    {
-      match => '@MONITORING_VAR_LOG@',
-      line => '/var/log/centreon-engine'
-    },
-    {
-      match => '@PLUGIN_DIR@',
-      line => '/usr/lib/nagios/plugin'
-    },
-    {
-      match => '@NAGIOS_PLUGIN@',
-      line => '/usr/lib/nagios/plugin'
-    },
-    {
-      match => '@CENTREON_ENGINE_CONNECTORS@',
-      line => '/usr/lib64/centreon-connector'
-    },
-    {
-      match => '@CENTREON_ENGINE_LIB@',
-      line => '/usr/lib64/centreon-engine'
-    },
-    {
-      match => '@CENTREONBROKER_CBMOD@',
-      line => '/usr/lib64/nagios/cbmod.so'
-    },
-    {
-      match => '@CENTREON_PLUGINS@',
-      line => '/usr/lib/centreon/plugin'
-    },
-    {
-      match => '@CENTREONBROKER_CBMOD@',
-      line => '/usr/lib/nagios/cbmod.so'
-    },
-    {
-      match => '@MONITORINGENGINE_PLUGIN@',
-      line => '/usr/lib/nagios/plugin'
-    },
-    {
-      match => '@MONITORING_VAR_LIB@',
-      line => '/var/lib/centreon-engine'
-    },
-    {
-      match => '@DB_HOST@',
-      line => $mysql_centreon_hostname
-    },
-    { match => '@DB_PORT@', line => $mysql_port },
-    { match => '@DB_USER@', line => $mysql_centreon_username },
-    { match => '@UTILS_DB@', line => 'centreon_status' },
-    {
-      match => '@NDOMOD_BINARY@',
-      line => '/usr/lib64/nagios/ndomod.o'
-    },
-    {
-      match => '@CENTREON_ENGINE_STATS_BINARY@',
-      line => '/usr/sbin/centenginestats'
-    },
-    { match => '@NAGIOS_BINARY@', line => '/usr/sbin/nagios' },
-    {
-      match => '@NAGIOSTATS_BINARY@',
-      line => '/usr/bin/nagiostat'
-    },
-    {
-      match => '@NAGIOS_INIT_SCRIPT@',
-      line => '/etc/init.d/nagios'
-    },
-    { match => '@STORAGE_DB@', line => 'centreon_storage' },
-    {
-      match => '@CENTREON_ENGINE_LIB@',
-      line => '/usr/lib64/centreon-engine'
-    },
-    {
-      match => '@CENTREONBROKER_LIB@',
-      line => '/usr/share/centreon/lib/centreon-broker'
-    },
-    { match => '@BROKER_USER@', line => 'centreon-broker' },
-    { match => '@BROKER_GROUP@', line => 'centreon-broker' },
-    {
-      match => '@CENTREONBROKER_ETC@',
-      line => '/etc/centreon-broker'
-    },
-    { match => '@BROKER_INIT_SCRIPT@', line => 'cbd' },
-    {
-      match => '@CENTREONBROKER_LOG@',
-      line => '/var/log/centreon-broker'
-    },
-    {
-      match => '@CENTREONBROKER_VARLIB@',
-      line => '/var/lib/centreon-broker'
-    },
-    {
-      match => '@ADMIN_PASSWORD@',
-      line => $centreon_admin_password
-    },
-    {
-      match => '$dbpasswd',
-      line => $mysql_centreon_password
-    },
-    {
-      match => 'CREATE TABLE',
-      line => 'CREATE TABLE IF NOT EXISTS'
-    }
-  ]
+  $exec_sed = @(EOT /)
+  sed -i \
+  -e 's/@CENTREON_DIR@/\/usr\/share\/centreon\//g' \
+  -e 's/@CENTREON_ETC@/\/etc\/centreon\//g' \
+  -e 's/@CENTREON_DIR_WWW@/\/usr\/share\/centreon\/www\//g' \
+  -e 's/@CENTREON_DIR_RRD@/\/var\/lib\/centreon/g' \
+  -e 's/@CENTREON_LOG@/\/var\/log\/centreon/g' \
+  -e 's/@CENTREON_VARLIB@/\/var\/lib\/centreon/g' \
+  -e 's/@CENTREON_GROUP@/centreon/g' \
+  -e 's/@CENTREON_USER@/centreon/g' \
+  -e 's/@RRDTOOL_DIR@/\/usr\/bin\/rrdtool/g' \
+  -e 's/@APACHE_USER@/apache/g' \
+  -e 's/@APACHE_GROUP@/apache/g' \
+  -e 's/@MAILER@/\/bin\/mail/g' \
+  -e 's/@MONITORINGENGINE_USER@/centreon-engine/g' \
+  -e 's/@MONITORINGENGINE_GROUP@/centreon-engine/g' \
+  -e 's/@MONITORINGENGINE_ETC@/\/etc\/centreon-engine/g' \
+  -e 's/@MONITORING_INIT_SCRIPT@/centengine/g' \
+  -e 's/@MONITORING_BINARY@/\/usr\/sbin\/centengine/g' \
+  -e 's/@MONITORING_VAR_LOG@/\/var\/log/centreon-engine/g' \
+  -e 's/@PLUGIN_DIR@/\/usr\/lib\/nagios\/plugin/g' \
+  -e 's/@NAGIOS_PLUGIN@/\/usr\/lib\/nagios\/plugin/g' \
+  -e 's/@CENTREON_ENGINE_CONNECTORS@/\/usr\/lib64\/centreon-connector/g' \
+  -e 's/@CENTREON_ENGINE_LIB@/\/usr\/lib64\/centreon-engine/g' \
+  -e 's/@CENTREONBROKER_CBMOD@/\/usr\/lib64\/nagios\/cbmod.so/g' \
+  -e 's/@CENTREON_PLUGINS@/\/usr\/lib\/centreon\/plugin/g' \
+  -e 's/@CENTREONBROKER_CBMOD@/\/usr\/lib\/nagios\/cbmod.so/g' \
+  -e 's/@MONITORINGENGINE_PLUGIN@/\/usr\/lib\/nagios\/plugin/g' \
+  -e 's/@MONITORING_VAR_LIB@/\/var\/lib\/centreon-engine/g' \
+  -e 's/@DB_HOST@/${mysql_centreon_hostname}/g' \
+  -e 's/@DB_PORT@/$mysql_port/g' \
+  -e 's/@DB_USER@/$mysql_centreon_username/g' \
+  -e 's/@UTILS_DB@/centreon_status/g' \
+  -e 's/@NDOMOD_BINARY@/\/usr\/lib64\/nagios\/ndomod.o/g' \
+  -e 's/@CENTREON_ENGINE_STATS_BINARY@/\/usr\/sbin\/centenginestats/g' \
+  -e 's/@NAGIOS_BINARY@/\/usr\/sbin\/nagios/g' \
+  -e 's/@NAGIOSTATS_BINARY@/\/usr\/bin\/nagiostat/g' \
+  -e 's/@NAGIOS_INIT_SCRIPT@/\/etc\/init.d\/nagios/g' \
+  -e 's/@STORAGE_DB@/centreon_storage/g' \
+  -e 's/@CENTREON_ENGINE_LIB@/\/usr\/lib64\/centreon-engine/g' \
+  -e 's/@CENTREONBROKER_LIB@/\/usr\/share\/centreon\/lib\/centreon-broker/g' \
+  -e 's/@BROKER_USER@/centreon-broker/g' \
+  -e 's/@BROKER_GROUP@/centreon-broker/g' \
+  -e 's/@CENTREONBROKER_ETC@/\/etc\/centreon-broker/g' \
+  -e 's/@BROKER_INIT_SCRIPT@/cbd/g' \
+  -e 's/@CENTREONBROKER_LOG@/\/var\/log\/centreon-broker/g' \
+  -e 's/@CENTREONBROKER_VARLIB@/\/var\/lib\/centreon-broker/g' \
+  -e 's/@ADMIN_PASSWORD@/${centreon_admin_password}/g' \
+  -e 's/\$dbpasswd/${mysql_centreon_password}/g' \
+  -e 's/CREATE TABLE/CREATE TABLE IF NOT EXISTS/g'
+  | EOT
 
   $files = [
     '/usr/share/centreon/www/install/createTablesCentstorage.sql',
@@ -176,18 +69,14 @@ class centreon::web_replaces (
   ]
 
   $files.each |String $file| {
-
     file { $file:
       ensure  => present,
     }
     $file_ = $file
-    $items.each |Hash $item| {
-      $timestamp = generate('/bin/date', '+%H%M%S%N')
-      $res = { "Replace ${timestamp} ${file_}" => $item }
-      create_resources(file_line, $res,
-        { path => $file_, multiple => true, require => File[$file_] }
-      )
-    }
+    $timestamp = generate('/bin/date', '+%H%M%S%N')
+    create_resources(exec, "Replace ${timestamp} ${file_}",
+      { command => "${exec_sed} ${file_}", require => File[$file_] }
+    )
   }
 
   centreon::dbcreate { $mysql_centreon_db:
