@@ -1,6 +1,6 @@
 {
   "name": "lgcosta-centreon",
-  "version": "0.1.28",
+  "version": "0.1.29",
   "author": "Centreon",
   "summary": "Centreon Monitoring",
   "license": "Apache-2.0",

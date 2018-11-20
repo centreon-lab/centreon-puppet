@@ -71,6 +71,7 @@ class centreon::web_replaces (
   $files.each |String $file| {
     file { $file:
       ensure  => present,
+      require => File['/usr/share/centreon/install']
     }
     create_resources(exec,
       { 
