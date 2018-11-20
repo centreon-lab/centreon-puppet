@@ -161,6 +161,10 @@ class centreon::web_replaces (
     {
       match => '$dbpasswd',
       line => $mysql_centreon_password
+    },
+    {
+      match => 'CREATE TABLE',
+      line => 'CREATE TABLE IF NOT EXISTS'
     }
   ]
 
