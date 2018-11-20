@@ -2,9 +2,6 @@
 # Centreon web replaces
 #
 class centreon::web_replaces (
-  $centreon_admin_password = 'changeme',
-  $mysql_root_password = 'changeme',
-  $mysql_centreon_password = 'changeme',
   $mysql_centreon_hostname = 'localhost',
   $mysql_port = '3306',
   $mysql_centreon_username = 'centreon',
