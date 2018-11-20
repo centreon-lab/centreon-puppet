@@ -10,7 +10,7 @@ class centreon::web_replaces (
 ) {
 
   $exec_sed = @(EOT /)
-  sed -i \
+  /bin/sed -i \
   -e 's/@CENTREON_DIR@/\/usr\/share\/centreon\//g' \
   -e 's/@CENTREON_ETC@/\/etc\/centreon\//g' \
   -e 's/@CENTREON_DIR_WWW@/\/usr\/share\/centreon\/www\//g' \
