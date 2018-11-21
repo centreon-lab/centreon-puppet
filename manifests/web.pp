@@ -32,11 +32,18 @@ class centreon::web (
     notify  => Service['httpd']
   }
 
+  service { 'rh-php71-php-fpm':
+    ensure  => running,
+    enable  => true,
+    require => Package[$centreon_web_packages]
+  }
+
   service { 'httpd':
     ensure  => running,
     enable  => true,
     require => Package[$centreon_web_packages]
   }
+
 
   file { '/var/spool/centreon':
     ensure => 'directory',
@@ -88,6 +95,38 @@ class centreon::web (
     zone     => 'public',
     port     => 80,
     protocol => 'tcp',
+  }
+
+  file { '/tmp/install_modules.php':
+    mode    => '0644',
+    source  => 'puppet:///modules/centreon/install_modules.php',
+    require => [
+      Package[$centreon_web_packages],
+      Service['rh-php71-php-fpm']
+    ]
+  }
+
+  exec { 'Install Plugin Manager extension':
+    command => '/opt/rh/rh-php71/root/bin/php /tmp/install_modules.php',
+    require => File['/tmp/install_modules.php']
+  }
+
+  package { ['python-requests', 'python-lxml']:
+    ensure  => latest
+  }
+
+  file { '/tmp/do_install_basic_plugins.py':
+    content => template('centreon/do_install_basic_plugins.py.erb'),
+    mode    => '0644',
+    require => [
+      Package[$centreon_web_packages],
+      Package[['python-requests', 'python-lxml']]
+    ]
+  }
+
+  exec { 'Install Plugins':
+    command => '/usr/bin/python /tmp/do_install_basic_plugins.py',
+    require => File['/tmp/do_install_basic_plugins.py']
   }
 
 }
