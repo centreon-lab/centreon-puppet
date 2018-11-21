@@ -9,8 +9,8 @@ class centreon::web_replaces (
   $mysql_centstorage_db = 'centreon_storage'
 ) {
 
-  file { '/tmp/sed_command.sh':
-    content => template('centreon/sed_command.sh.erb'),
+  file { '/tmp/do_replace.py':
+    content => template('centreon/do_replace.py.erb'),
     mode    => '0755',
     require => Package[$centreon_web_packages]
   }
@@ -33,8 +33,8 @@ class centreon::web_replaces (
     create_resources(exec,
       { 
         "Replaces in ${file}" => {
-          command => "/bin/sh /tmp/sed_command.sh ${file}",
-          require => [File['/tmp/sed_command.sh'], File[$file]]
+          command => "/bin/python /tmp/do_replace.py ${file}",
+          require => [File['/tmp/do_replace.py'], File[$file]]
         }
       }
     )

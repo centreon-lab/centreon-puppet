@@ -1,0 +1,65 @@
+#!/bin/env python
+from sys import argv
+from re import search
+
+patterns = {
+  '@CENTREON_DIR@': '/usr/share/centreon/',
+  '@CENTREON_ETC@': '/etc/centreon/',
+  '@CENTREON_DIR_WWW@': '/usr/share/centreon/www/',
+  '@CENTREON_DIR_RRD@': '/var/lib/centreon',
+  '@CENTREON_LOG@': '/var/log/centreon',
+  '@CENTREON_VARLIB@': '/var/lib/centreon',
+  '@CENTREON_GROUP@': 'centreon',
+  '@CENTREON_USER@': 'centreon',
+  '@RRDTOOL_DIR@': '/usr/bin/rrdtool',
+  '@APACHE_USER@': 'apache',
+  '@APACHE_GROUP@': 'apache',
+  '@MAILER@': '/bin/mail',
+  '@MONITORINGENGINE_USER@': 'centreon-engine',
+  '@MONITORINGENGINE_GROUP@': 'centreon-engine',
+  '@MONITORINGENGINE_ETC@': '/etc/centreon-engine',
+  '@MONITORING_INIT_SCRIPT@': 'centengine',
+  '@MONITORING_BINARY@': '/usr/sbin/centengine',
+  '@MONITORING_VAR_LOG@': '/var/log/centreon-engine',
+  '@PLUGIN_DIR@': '/usr/lib/nagios/plugin',
+  '@NAGIOS_PLUGIN@': '/usr/lib/nagios/plugin',
+  '@CENTREON_ENGINE_CONNECTORS@': '/usr/lib64/centreon-connector',
+  '@CENTREON_ENGINE_LIB@': '/usr/lib64/centreon-engine',
+  '@CENTREONBROKER_CBMOD@': '/usr/lib64/nagios/cbmod.so',
+  '@CENTREON_PLUGINS@': '/usr/lib/centreon/plugin',
+  '@CENTREONBROKER_CBMOD@': '/usr/lib/nagios/cbmod.so',
+  '@MONITORINGENGINE_PLUGIN@': '/usr/lib/nagios/plugin',
+  '@MONITORING_VAR_LIB@': '/var/lib/centreon-engine',
+  '@DB_HOST@': '<%= @mysql_centreon_hostname %>',
+  '@DB_PORT@': '<%= @mysql_port %>',
+  '@DB_USER@': '<%= @mysql_centreon_username %>',
+  '@UTILS_DB@': 'centreon_status',
+  '@NDOMOD_BINARY@': '/usr/lib64/nagios/ndomod.o',
+  '@CENTREON_ENGINE_STATS_BINARY@': '/usr/sbin/centenginestats',
+  '@NAGIOS_BINARY@': '/usr/sbin/nagios',
+  '@NAGIOSTATS_BINARY@': '/usr/bin/nagiostat',
+  '@NAGIOS_INIT_SCRIPT@': '/etc/init.d/nagios',
+  '@STORAGE_DB@': 'centreon_storage',
+  '@CENTREON_ENGINE_LIB@': '/usr/lib64/centreon-engine',
+  '@CENTREONBROKER_LIB@': '/usr/share/centreon/lib/centreon-broker',
+  '@BROKER_USER@': 'centreon-broker',
+  '@BROKER_GROUP@': 'centreon-broker',
+  '@CENTREONBROKER_ETC@': '/etc/centreon-broker',
+  '@BROKER_INIT_SCRIPT@': 'cbd',
+  '@CENTREONBROKER_LOG@': '/var/log/centreon-broker',
+  '@CENTREONBROKER_VARLIB@': '/var/lib/centreon-broker',
+  '@ADMIN_PASSWORD@': '<%= @centreon_admin_password %>',
+  '$dbpasswd': '<%= @mysql_centreon_password %>',
+  'CREATE TABLE': 'CREATE TABLE IF NOT EXISTS'
+}
+
+with open(argv[1], 'r') as _f:
+  file_replace = _f.readlines()
+
+for key in patterns.keys():
+  for index, line in enumerate(file_replace):
+    if search(key, line):
+      file_replace[index] = line.replace(key, patterns[key])
+
+with open(argv[1], 'w') as _f:
+  _f.writelines(file_replace)
