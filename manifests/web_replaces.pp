@@ -32,13 +32,13 @@ class centreon::web_replaces inherits ::centreon::params {
         }
       }
     )
-  }
+  } ->
 
   centreon::dbcreate { $mysql_centreon_db:
       user     => $mysql_centreon_username,
       password => $mysql_centreon_password,
       sql      => '/usr/share/centreon/www/install/createTables.sql'
-  }
+  } ->
 
   centreon::dbcreate { $mysql_centstorage_db:
       user     => $mysql_centreon_username,
