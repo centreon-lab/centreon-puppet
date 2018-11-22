@@ -17,5 +17,10 @@ class centreon::web_config {
     }
 
     include centreon::web_replaces
+
+    # remove install dir
+    exec { 'Remove install directory':
+      command => '/bin/rm -rf /usr/share/centreon/install && /bin/rm -rf /usr/share/centreon/www/install'
+    }
   }
 }

@@ -2,7 +2,7 @@
 # Centreon Puppet Common tasks
 #
 
-class centreon::common {
+class centreon::common inherits ::centreon::params {
 
   if $::operatingsystem != 'CentOS' {
     # Not compatible with non CentOS

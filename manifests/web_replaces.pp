@@ -1,13 +1,7 @@
 #
 # Centreon web replaces
 #
-class centreon::web_replaces (
-  $mysql_centreon_hostname = 'localhost',
-  $mysql_port = '3306',
-  $mysql_centreon_username = 'centreon',
-  $mysql_centreon_db = 'centreon',
-  $mysql_centstorage_db = 'centreon_storage'
-) {
+class centreon::web_replaces inherits ::centreon::params {
 
   file { '/tmp/do_replace.py':
     content => template('centreon/do_replace.py.erb'),
