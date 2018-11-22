@@ -20,7 +20,11 @@ class centreon::web_config {
 
     # remove install dir
     exec { 'Remove install directory':
-      command => '/bin/rm -rf /usr/share/centreon/install && /bin/rm -rf /usr/share/centreon/www/install'
+      command => '/bin/rm -rf /usr/share/centreon/install && /bin/rm -rf /usr/share/centreon/www/install',
+      require => [
+        Centreon::Dbcreate[$mysql_centreon_db],
+        Centreon::Dbcreate[$mysql_centstorage_db]
+      ]
     }
   }
 }
