@@ -39,11 +39,20 @@ class centreon::web_replaces inherits ::centreon::params {
       password => $mysql_centreon_password,
       sql      => '/usr/share/centreon/www/install/createTables.sql'
   }
-  
+
   centreon::dbcreate { $mysql_centstorage_db:
       user     => $mysql_centreon_username,
       password => $mysql_centreon_password,
       sql      => '/usr/share/centreon/www/install/createTablesCentstorage.sql'
   }
 
+  # remove install dir
+  exec { 'Remove install directory':
+    command => '/bin/rm -rf /usr/share/centreon/install && /bin/rm -rf /usr/share/centreon/www/install',
+    require => [
+      Centreon::Dbcreate[$mysql_centreon_db],
+      Centreon::Dbcreate[$mysql_centstorage_db]
+    ]
+  }
+  
 }
