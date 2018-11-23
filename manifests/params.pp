@@ -10,5 +10,6 @@ class centreon::params {
   $mysql_centstorage_db       = 'centreon_storage'
   $mysql_root_password        = 'changeme'
   $mysql_centreon_password    = 'changeme'
+  $centreon_admin_password    = 'changeme'
   $php_timezone               = 'Europe/Paris'
 }
