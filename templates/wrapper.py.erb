@@ -7,7 +7,7 @@ import json
 import requests
 import yaml
 
-URI = '<%= centreon_webapi_host %>:<%= centreon_webapi_port %>/centreon'
+URI = '<%= @centreon_webapi_host %>:<%= @centreon_webapi_port %>/centreon'
 API = URI + '/api/index.php?action=action&object=centreon_clapi'
 AUTH = URI + '/api/index.php?action=authenticate'
 
@@ -150,7 +150,7 @@ mapobjects = {
 
 gettoken = requests.post(AUTH, data={
     'username': 'admin',
-    'password': '<%= centreon_admin_password %>'
+    'password': '<%= @centreon_admin_password %>'
 })
 
 if gettoken.status_code == 200:
