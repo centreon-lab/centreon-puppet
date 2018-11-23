@@ -85,7 +85,9 @@ class centreon::web inherits ::centreon::common {
     notify  => Service['centcore']
   }
 
-  include centreon::web_config
+  if ($::centreon_install_dir == 'true') { 
+    include centreon::web_config
+  }
 
   class { 'firewalld': }
   firewalld_port { 'Open port 80 to Centreon Web':
