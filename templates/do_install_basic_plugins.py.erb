@@ -17,7 +17,7 @@ token = lxml.html.fromstring(
 cookies = page.cookies
 login_data = dict(
     useralias='admin',
-    password='{{ centreon_admin_password }}',
+    password='<%= centreon_admin_password %>',
     centreon_token=token
 )
 do_login = client.post(URL, data=login_data, cookies=cookies)
