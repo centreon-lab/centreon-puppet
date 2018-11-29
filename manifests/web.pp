@@ -121,7 +121,11 @@ class centreon::web inherits ::centreon::common {
   service { 'centcore':
     ensure  => running,
     enable  => true,
-    require => Package[$centreon_web_packages]
+    require => [
+      Centreon::Dbcreate[$mysql_centreon_db],
+      Centreon::Dbcreate[$mysql_centstorage_db],      
+      Package[$centreon_web_packages]
+    ]
   }
 
   file { '/etc/centreon/conf.pm':
@@ -152,7 +156,11 @@ class centreon::web inherits ::centreon::common {
 
   exec { 'Install Plugin Manager extension':
     command => '/opt/rh/rh-php71/root/bin/php /tmp/install_modules.php',
-    require => File['/tmp/install_modules.php']
+    require => [
+      Centreon::Dbcreate[$mysql_centreon_db],
+      Centreon::Dbcreate[$mysql_centstorage_db],
+      File['/tmp/install_modules.php']
+    ]
   }
 
   package { ['python-requests', 'python-lxml']:
@@ -170,7 +178,11 @@ class centreon::web inherits ::centreon::common {
 
   exec { 'Install Plugins':
     command => '/usr/bin/python /tmp/do_install_basic_plugins.py',
-    require => File['/tmp/do_install_basic_plugins.py']
+    require => [
+      Centreon::Dbcreate[$mysql_centreon_db],
+      Centreon::Dbcreate[$mysql_centstorage_db],
+      File['/tmp/do_install_basic_plugins.py']
+    ]
   }
 
 }
