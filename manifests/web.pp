@@ -69,12 +69,14 @@ class centreon::web inherits ::centreon::common {
   }
 
   centreon::dbcreate { $mysql_centreon_db:
+      rootpass => $mysql_root_password, 
       user     => $mysql_centreon_username,
       password => $mysql_centreon_password,
       sql      => '/usr/share/centreon/www/install/createTables.sql'
   }
 
   centreon::dbcreate { $mysql_centstorage_db:
+      rootpass => $mysql_root_password,
       user     => $mysql_centreon_username,
       password => $mysql_centreon_password,
       sql      => '/usr/share/centreon/www/install/createTablesCentstorage.sql'
