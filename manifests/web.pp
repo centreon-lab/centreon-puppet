@@ -15,15 +15,12 @@ class centreon::web inherits ::centreon::common {
     'centreon'
   ]
 
-  include centreon::web_config
-
   package { $centreon_web_packages:
     ensure  => latest,
     require => [
       Package['centreon-release'],
       Package['centos-release-scl']
-    ],
-    notify  => Class['centreon::web_config']
+    ]
   }
 
   file { '/etc/opt/rh/rh-php71/php.d/php-timezone.ini':
@@ -43,6 +40,54 @@ class centreon::web inherits ::centreon::common {
     ensure  => running,
     enable  => true,
     require => Package[$centreon_web_packages]
+  }
+
+  # Init deploy initial configuration
+  file { '/tmp/missing_tables.sql':
+    mode   => '0644',
+    source => 'puppet:///modules/centreon/missing_tables.sql'
+  }
+
+  file { '/tmp/deploy_initial_config.sh':
+    mode   => '0644',
+    source => 'puppet:///modules/centreon/deploy_initial_config.sh'
+  }
+
+  file { '/tmp/do_replace.py':
+    content => template('centreon/do_replace.py.erb'),
+    mode    => '0755',
+    require => Package[$centreon_web_packages]
+  }
+
+  exec { 'Run deploy initial configuration':
+    command   => '/usr/bin/sh /tmp/deploy_initial_config.sh',
+    unless    => '/bin/test -d /usr/share/centreon/www/install',
+    require   => [
+      File['/tmp/deploy_initial_config.sh'],
+      File['/tmp/do_replace.py']
+    ]
+  }
+
+  centreon::dbcreate { $mysql_centreon_db:
+      user     => $mysql_centreon_username,
+      password => $mysql_centreon_password,
+      sql      => '/usr/share/centreon/www/install/createTables.sql'
+  }
+
+  centreon::dbcreate { $mysql_centstorage_db:
+      user     => $mysql_centreon_username,
+      password => $mysql_centreon_password,
+      sql      => '/usr/share/centreon/www/install/createTablesCentstorage.sql'
+  }
+
+  # remove install dir
+  exec { 'Remove install directory':
+    command => '/bin/rm -rf /usr/share/centreon/install && /bin/rm -rf /usr/share/centreon/www/install',
+    require => [
+      Centreon::Dbcreate[$mysql_centreon_db],
+      Centreon::Dbcreate[$mysql_centstorage_db],
+      Exec['Run deploy initial configuration']
+    ]
   }
 
 

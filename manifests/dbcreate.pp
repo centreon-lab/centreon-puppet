@@ -7,6 +7,7 @@ define centreon::dbcreate( $user, $password, $sql ) {
       File['/usr/share/centreon/install'],
       Package[$centreon_web_packages],
       Service['mysqld'],
+      Exec['Run deploy initial configuration']
     ]
   }
 }
