@@ -15,12 +15,15 @@ class centreon::web inherits ::centreon::common {
     'centreon'
   ]
 
+  #include centreon::web_config
+
   package { $centreon_web_packages:
     ensure  => latest,
     require => [
       Package['centreon-release'],
       Package['centos-release-scl']
-    ]
+    ],
+    notify  => Class['centreon::web_config']
   }
 
   file { '/etc/opt/rh/rh-php71/php.d/php-timezone.ini':
@@ -83,10 +86,6 @@ class centreon::web inherits ::centreon::common {
     mode    => '0644',
     require => Package[$centreon_web_packages],
     notify  => Service['centcore']
-  }
-
-  if ($::centreon_install_dir == 'true') { 
-    include centreon::web_config
   }
 
   class { 'firewalld': }
