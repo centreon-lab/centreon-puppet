@@ -61,7 +61,7 @@ class centreon::web inherits ::centreon::common {
 
   exec { 'Run deploy initial configuration':
     command   => '/usr/bin/sh /tmp/deploy_initial_config.sh',
-    unless    => '/bin/test -d /usr/share/centreon/www/install',
+    unless    => '/bin/test ! -d /usr/share/centreon/www/install',
     require   => [
       File['/tmp/deploy_initial_config.sh'],
       File['/tmp/do_replace.py']
