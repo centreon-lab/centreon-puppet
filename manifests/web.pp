@@ -15,7 +15,7 @@ class centreon::web inherits ::centreon::common {
     'centreon'
   ]
 
-  #include centreon::web_config
+  include centreon::web_config
 
   package { $centreon_web_packages:
     ensure  => latest,
