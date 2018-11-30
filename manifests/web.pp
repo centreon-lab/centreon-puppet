@@ -49,8 +49,9 @@ class centreon::web inherits ::centreon::common {
   }
 
   file { '/tmp/deploy_initial_config.sh':
-    mode   => '0644',
-    source => 'puppet:///modules/centreon/deploy_initial_config.sh'
+    content => template('centreon/deploy_initial_config.sh.erb'),
+    mode    => '0644',
+    require => Package[$centreon_web_packages]
   }
 
   file { '/tmp/do_replace.py':
@@ -61,37 +62,11 @@ class centreon::web inherits ::centreon::common {
 
   exec { 'Run deploy initial configuration':
     command   => '/usr/bin/sh /tmp/deploy_initial_config.sh',
-    unless    => '/bin/test ! -d /usr/share/centreon/www/install',
     require   => [
       File['/tmp/deploy_initial_config.sh'],
       File['/tmp/do_replace.py']
     ]
   }
-
-  centreon::dbcreate { $mysql_centreon_db:
-      rootpass => $mysql_root_password, 
-      user     => $mysql_centreon_username,
-      password => $mysql_centreon_password,
-      sql      => '/usr/share/centreon/www/install/createTables.sql'
-  }
-
-  centreon::dbcreate { $mysql_centstorage_db:
-      rootpass => $mysql_root_password,
-      user     => $mysql_centreon_username,
-      password => $mysql_centreon_password,
-      sql      => '/usr/share/centreon/www/install/createTablesCentstorage.sql'
-  }
-
-  # remove install dir
-  exec { 'Remove install directory':
-    command => '/bin/rm -rf /usr/share/centreon/install && /bin/rm -rf /usr/share/centreon/www/install',
-    require => [
-      Centreon::Dbcreate[$mysql_centreon_db],
-      Centreon::Dbcreate[$mysql_centstorage_db],
-      Exec['Run deploy initial configuration']
-    ]
-  }
-
 
   file { '/var/spool/centreon':
     ensure => 'directory',
@@ -124,8 +99,7 @@ class centreon::web inherits ::centreon::common {
     ensure  => running,
     enable  => true,
     require => [
-      Centreon::Dbcreate[$mysql_centreon_db],
-      Centreon::Dbcreate[$mysql_centstorage_db],      
+      Exec['Run deploy initial configuration'],
       Package[$centreon_web_packages]
     ]
   }
@@ -159,8 +133,7 @@ class centreon::web inherits ::centreon::common {
   exec { 'Install Plugin Manager extension':
     command => '/opt/rh/rh-php71/root/bin/php /tmp/install_modules.php',
     require => [
-      Centreon::Dbcreate[$mysql_centreon_db],
-      Centreon::Dbcreate[$mysql_centstorage_db],
+      Exec['Run deploy initial configuration'],
       File['/tmp/install_modules.php']
     ]
   }
@@ -181,8 +154,7 @@ class centreon::web inherits ::centreon::common {
   exec { 'Install Plugins':
     command => '/usr/bin/python /tmp/do_install_basic_plugins.py',
     require => [
-      Centreon::Dbcreate[$mysql_centreon_db],
-      Centreon::Dbcreate[$mysql_centstorage_db],
+      Exec['Run deploy initial configuration'],
       File['/tmp/do_install_basic_plugins.py']
     ]
   }

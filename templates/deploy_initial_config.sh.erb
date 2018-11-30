@@ -1,0 +1,44 @@
+#!/bin/sh
+
+INSTALLDIR="/usr/share/centreon/install"
+INSTALLWWWDIR="/usr/share/centreon/www/install"
+
+if [ -d $INSTALLWWWDIR ]; then
+    mkdir -p $INSTALLDIR
+    for SQL in ${INSTALLWWWDIR}/*.sql; do
+        /bin/python /tmp/do_replace.py $SQL
+    done
+    # Create databases:
+    /bin/mysql -uroot -p'<%= @mysql_root_password %>' \
+        -e "CREATE DATABASE IF NOT EXISTS centreon; GRANT ALL ON centreon.* TO <%= @mysql_centreon_username %>@localhost identified by '<%= @mysql_centreon_password %>';"
+    /bin/mysql -u<%= @mysql_centreon_username %> -p'<%= @mysql_centreon_password %>' centreon < /usr/share/centreon/www/install/createTables.sql
+    /bin/mysql -uroot -p'<%= @mysql_root_password %>' \
+        -e "CREATE DATABASE IF NOT EXISTS centreon_storage; GRANT ALL ON centreon_storage.* TO <%= @mysql_centreon_username %>@localhost identified by '<%= @mysql_centreon_password %>';"
+    /bin/mysql -u<%= @mysql_centreon_username %> -p'<%= @mysql_centreon_password %>' centreon < /usr/share/centreon/www/install/createTables.sql
+    
+    # Dump databases
+    for DUMP in \
+        '/usr/share/centreon/www/install/createTables.sql' \
+        '/usr/share/centreon/www/install/insertMacros.sql' \
+        '/usr/share/centreon/www/install/var/baseconf/centreon-engine.sql' \
+        '/usr/share/centreon/www/install/var/baseconf/centreon-broker.sql' \
+        '/usr/share/centreon/www/install/insertTopology.sql' \
+        '/usr/share/centreon/www/install/insertTimeperiods.sql' \
+        '/usr/share/centreon/www/install/insertBaseConf.sql' \
+        '/usr/share/centreon/www/install/insertACL.sql' \
+    ; do
+        /bin/mysql -u<%= @mysql_centreon_username %> -p'<%= @mysql_centreon_password %>' centreon < $DUMP
+    done
+    for DUMP in \
+      '/usr/share/centreon/www/install/createTablesCentstorage.sql' \
+      '/usr/share/centreon/install/missing_tables.sql' \
+      '/usr/share/centreon/www/install/installBroker.sql' \
+    ; do
+        /bin/mysql -u<%= @mysql_centreon_username %> -p'<%= @mysql_centreon_password %>' centreon_storage < $DUMP
+    done
+
+    # Finally, remove install directories
+    /bin/rm -rf /usr/share/centreon/install && /bin/rm -rf /usr/share/centreon/www/install
+else
+    exit 0
+fi
