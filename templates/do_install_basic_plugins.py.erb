@@ -38,7 +38,7 @@ URL_INSTALLED = (
 do_installed = client.get(URL_INSTALLED, cookies=cookies)
 packinstalled = json.loads(do_installed.content)
 
-pack_install = {{ plugin_pack }}
+pack_install = <%= @plugin_pack %>
 
 URL_INSTALL = (
     'http://localhost/centreon/api/internal.php?'

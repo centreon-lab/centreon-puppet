@@ -12,4 +12,5 @@ class centreon::params {
   $mysql_centreon_password    = 'changeme'
   $centreon_admin_password    = 'changeme'
   $php_timezone               = 'Europe/Paris'
+  $plugin_pack                = ['base-generic', 'Linux SNMP']
 }
