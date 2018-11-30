@@ -72,6 +72,13 @@ class centreon::web (
     require => Package[$centreon_web_packages]
   }
 
+  exec { 'set-mysql-password':
+    unless  => "mysqladmin -uroot -p${mysql_root_password} status",
+    path    => ['/bin', '/usr/bin'],
+    command => "mysqladmin -uroot password ${mysql_root_password}",
+    require => Service['mysqld'],
+  }
+
   exec { 'Run deploy initial configuration':
     command   => '/usr/bin/sh /tmp/deploy_initial_config.sh',
     require   => [

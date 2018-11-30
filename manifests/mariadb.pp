@@ -15,13 +15,6 @@ class centreon::mariadb inherits ::centreon::common {
     require => Package['MariaDB-server']
   }
 
-  exec { 'set-mysql-password':
-    unless  => "mysqladmin -uroot -p${mysql_root_password} status",
-    path    => ['/bin', '/usr/bin'],
-    command => "mysqladmin -uroot password ${mysql_root_password}",
-    require => Service['mysqld'],
-  }
-
   if $::operatingsystemmajrelease == 7 {
     file { '/etc/systemd/system/mariadb.service.d/limits.conf':
       ensure  => present,
