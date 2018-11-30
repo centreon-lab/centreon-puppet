@@ -1,6 +1,6 @@
 #!/bin/env python
 from sys import argv
-from re import search
+from re import search, IGNORECASE
 
 patterns = {
   '@CENTREON_DIR@': '/usr/share/centreon/',
@@ -18,11 +18,16 @@ patterns = {
   '@MONITORINGENGINE_USER@': 'centreon-engine',
   '@MONITORINGENGINE_GROUP@': 'centreon-engine',
   '@MONITORINGENGINE_ETC@': '/etc/centreon-engine',
+  '@MONITORING_USER@': 'centreon-engine',
+  '@MONITORING_GROUP@': 'centreon-engine',
+  '@MONITORING_ETC@': '/etc/centreon-engine',
+  '@MONITORING_VARLOG@': '/var/log/centreon-engine',
   '@MONITORING_INIT_SCRIPT@': 'centengine',
   '@MONITORING_BINARY@': '/usr/sbin/centengine',
   '@MONITORING_VAR_LOG@': '/var/log/centreon-engine',
-  '@PLUGIN_DIR@': '/usr/lib/nagios/plugin',
-  '@NAGIOS_PLUGIN@': '/usr/lib/nagios/plugin',
+  '@PLUGIN_DIR@': '/usr/lib64/nagios/plugin',
+  '@NAGIOS_PLUGIN@': '/usr/lib64/nagios/plugin',
+  '@CENTREONPLUGINS@': '/usr/lib/centreon/plugins',
   '@CENTREON_ENGINE_CONNECTORS@': '/usr/lib64/centreon-connector',
   '@CENTREON_ENGINE_LIB@': '/usr/lib64/centreon-engine',
   '@CENTREONBROKER_CBMOD@': '/usr/lib64/nagios/cbmod.so',
@@ -33,6 +38,8 @@ patterns = {
   '@DB_HOST@': '<%= @mysql_centreon_hostname %>',
   '@DB_PORT@': '<%= @mysql_port %>',
   '@DB_USER@': '<%= @mysql_centreon_username %>',
+  '@DB_PASS@': '<%= @mysql_centreon_password %>',
+  '@DB_PASSWORD@': '<%= @mysql_centreon_password %>',
   '@UTILS_DB@': 'centreon_status',
   '@NDOMOD_BINARY@': '/usr/lib64/nagios/ndomod.o',
   '@CENTREON_ENGINE_STATS_BINARY@': '/usr/sbin/centenginestats',
@@ -40,6 +47,7 @@ patterns = {
   '@NAGIOSTATS_BINARY@': '/usr/bin/nagiostat',
   '@NAGIOS_INIT_SCRIPT@': '/etc/init.d/nagios',
   '@STORAGE_DB@': 'centreon_storage',
+  '@DB_STORAGE@': 'centreon_storage',
   '@CENTREON_ENGINE_LIB@': '/usr/lib64/centreon-engine',
   '@CENTREONBROKER_LIB@': '/usr/share/centreon/lib/centreon-broker',
   '@BROKER_USER@': 'centreon-broker',
@@ -48,9 +56,10 @@ patterns = {
   '@BROKER_INIT_SCRIPT@': 'cbd',
   '@CENTREONBROKER_LOG@': '/var/log/centreon-broker',
   '@CENTREONBROKER_VARLIB@': '/var/lib/centreon-broker',
-  '@ADMIN_PASSWORD@': '<%= @centreon_admin_password %>',
-  '$dbpasswd': '<%= @mysql_centreon_password %>',
-  'CREATE TABLE': 'CREATE TABLE IF NOT EXISTS'
+  '@CENTREON_LOG@': '/var/log/centreon-broker',
+  '@CENTREON_VARLIB@': '/var/lib/centreon-broker',
+  '@admin_password@': '<%= @centreon_admin_password %>',
+  '$dbpasswd': '<%= @mysql_centreon_password %>'
 }
 
 with open(argv[1], 'r') as _f:
@@ -58,7 +67,7 @@ with open(argv[1], 'r') as _f:
 
 for key in patterns.keys():
   for index, line in enumerate(file_replace):
-    if search(key, line):
+    if search(key, line, IGNORECASE):
       file_replace[index] = line.replace(key, patterns[key])
 
 with open(argv[1], 'w') as _f:
