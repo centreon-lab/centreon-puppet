@@ -2,7 +2,19 @@
 # Centreon Web deploy
 #
 
-class centreon::web inherits ::centreon::common {
+class centreon::web (
+  String $mysql_centreon_hostname    = 'localhost',
+  String $mysql_centstorage_hostname = 'localhost',
+  String $mysql_port                 = '3306',
+  String $mysql_centreon_username    = 'centreon',
+  String $mysql_centreon_db          = 'centreon',
+  String $mysql_centstorage_db       = 'centreon_storage',
+  String $mysql_root_password        = 'changeme',
+  String $mysql_centreon_password    = 'changeme',
+  String $centreon_admin_password    = 'changeme',
+  String $php_timezone               = 'Europe/Paris',
+  Array  $plugin_pack                = ['base-generic', 'Linux SNMP']
+) inherits ::centreon::common {
 
   include stdlib
 
